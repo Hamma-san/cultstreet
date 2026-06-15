@@ -1,0 +1,10 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" role="img" aria-label="Camiseta preta CultStreet Origens">
+  <rect width="600" height="750" fill="#eee3d2"/>
+  <path d="M164 158l72-42c32 35 96 35 128 0l72 42 96 116-74 68-48-54v304H190V288l-48 54-74-68z" fill="#101010"/>
+  <path d="M236 116c20 28 108 28 128 0l-18 66c-27 18-64 18-92 0z" fill="#262626"/>
+  <rect x="205" y="318" width="190" height="116" rx="6" fill="#d7342a"/>
+  <text x="300" y="390" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="900" fill="#f6f1e8">CultStreet</text>
+  <text x="300" y="468" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="900" fill="#c89f54">ORIGENS</text>
+</svg>
+
+

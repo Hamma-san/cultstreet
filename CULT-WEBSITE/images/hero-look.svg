@@ -1,0 +1,18 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 760" role="img" aria-label="Look urbano CultStreet com camiseta, calca e bone">
+  <rect width="640" height="760" fill="#efe5d6"/>
+  <path d="M80 676c115-67 345-69 480 0v84H80z" fill="#d7342a"/>
+  <path d="M212 167c31-52 88-77 145-61 57 16 91 63 83 123l-20 154H232z" fill="#101010"/>
+  <path d="M240 208c42 28 120 28 172 0l24 312H210z" fill="#f6f1e8"/>
+  <path d="M232 382h188l32 274h-74l-46-174-48 174h-76z" fill="#234e3a"/>
+  <path d="M239 206l-90 84 48 55 60-58zM407 206l88 84-48 55-58-58z" fill="#101010"/>
+  <path d="M260 286h126v74H260z" fill="#d7342a"/>
+  <text x="323" y="336" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="900" fill="#f6f1e8">CultStreet</text>
+  <path d="M260 126c38-35 92-37 130-3 4 28-9 47-39 58-39 15-76 2-91-55z" fill="#101010"/>
+  <path d="M254 135c37-42 115-43 156-2 44 1 70 12 88 31-66 16-151 18-244 7z" fill="#d7342a"/>
+  <circle cx="318" cy="190" r="54" fill="#c89f54"/>
+  <path d="M264 183c26 20 69 20 111 0-8 43-26 66-55 66-30 0-48-22-56-66z" fill="#c89f54"/>
+  <path d="M288 178c7-8 16-8 23 0M334 178c7-8 16-8 23 0" stroke="#101010" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M309 216c12 9 28 9 40 0" stroke="#101010" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg>
+
+
