@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CultStreet | Checkout</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header solid">
+        <a class="logo" href="index.html">CultStreet</a>
+        <nav class="nav">
+            <a href="catalogo.html">Loja</a>
+            <a href="index.html#manifesto">Manifesto</a>
+            <a href="checkout.html">Carrinho <span data-cart-count>0</span></a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <section class="checkout">
+            <div>
+                <span class="eyebrow">Carrinho</span>
+                <h1>CHECKOUT CULTSTREET</h1>
+                <div class="cart-list" data-cart-list></div>
+            </div>
+
+            <aside class="checkout-panel">
+                <h2>Resumo</h2>
+                <div class="totals" data-cart-totals></div>
+
+                <form data-checkout-form>
+                    <input required name="nome" placeholder="Nome completo">
+                    <input required type="email" name="email" placeholder="E-mail">
+                    <input required name="whatsapp" placeholder="WhatsApp">
+                    <input required name="cep" placeholder="CEP">
+                    <input required name="endereco" placeholder="Endereço completo">
+                    <p class="checkout-note">PIX, cartão e boleto serão escolhidos com segurança no Mercado Pago.</p>
+                    <button class="btn btn-light" type="submit">FINALIZAR COMPRA</button>
+                </form>
+            </aside>
+        </section>
+    </main>
+
+    <footer class="premium-footer"><div><a class="footer-logo" href="index.html">CultStreet</a><p>Vista a Cultura.</p></div><nav class="footer-links"><a href="trocas-devolucoes.html">Política de Troca e Devolução</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="envio.html">Prazo de Envio</a><a href="guia-tamanhos.html">Guia de Tamanhos</a><a href="sobre.html">Sobre a CultStreet</a><a href="contato.html">Contato</a></nav><nav class="footer-social"><a href="#">Instagram</a><a href="#">TikTok</a></nav></footer>
+
+    <script src="products.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
