@@ -1,0 +1,9 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" role="img" aria-label="Bone preto CultStreet">
+  <rect width="600" height="750" fill="#eee3d2"/>
+  <path d="M152 374c21-112 92-174 200-174 89 0 147 50 174 150-109 39-230 47-374 24z" fill="#101010"/>
+  <path d="M132 388c101 25 222 17 388-25 44 5 74 26 90 62-176 49-344 53-504 12 3-24 12-40 26-49z" fill="#d7342a"/>
+  <path d="M236 250c46 31 94 31 144 0 24 27 39 64 44 110-77 20-153 21-228 0 5-46 18-83 40-110z" fill="#181818"/>
+  <text x="310" y="344" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="900" fill="#f6f1e8">CultStreet</text>
+</svg>
+
+

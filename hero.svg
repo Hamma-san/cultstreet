@@ -1,0 +1,11 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000">
+  <rect width="1600" height="1000" fill="#090909"/>
+  <circle cx="800" cy="400" r="330" fill="#171717"/>
+  <path d="M620 850l55-465 125-95 125 95 55 465z" fill="#050505"/>
+  <path d="M675 385l-170 150 70 95 110-105zM925 385l170 150-70 95-110-105z" fill="#080808"/>
+  <path d="M716 330c44-85 130-86 168 0l-20 100H736z" fill="#111"/>
+  <text x="800" y="555" text-anchor="middle" fill="#303030" font-family="Arial" font-size="110" font-weight="900">CultStreet</text>
+  <text x="800" y="925" text-anchor="middle" fill="#c2a878" font-family="Arial" font-size="20" letter-spacing="14">VISTA A CULTURA</text>
+</svg>
+
+
