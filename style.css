@@ -1,0 +1,784 @@
+﻿:root {
+    --black: #000;
+    --ice: #f5f5f5;
+    --graphite: #1a1a1a;
+    --gray: #b0b0b0;
+    --gold: #c2a878;
+    --line: rgba(245, 245, 245, 0.14);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--black);
+    color: var(--ice);
+}
+
+img {
+    display: block;
+    width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+.site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 7%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.78), transparent);
+}
+
+.site-header.solid {
+    background: rgba(0, 0, 0, 0.88);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(14px);
+}
+
+.logo {
+    flex: 0 0 auto;
+    width: 230px;
+    height: 64px;
+    overflow: hidden;
+    background: url("images/cultstreet-logo-transparent.png") center / contain no-repeat;
+    text-indent: -9999px;
+}
+
+.nav {
+    display: flex;
+    gap: 28px;
+}
+
+.nav a {
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.nav span {
+    color: var(--gold);
+}
+
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    text-align: center;
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.24), rgba(0, 0, 0, 0.88));
+}
+
+.hero-content {
+    position: relative;
+    width: min(980px, 90%);
+}
+
+.hero-brand {
+    width: min(560px, 88vw);
+    height: 180px;
+    margin: 0 auto 18px;
+    object-fit: contain;
+    object-position: center;
+}
+
+.hero-content span,
+.manifesto span,
+.page-hero span,
+.line-heading span,
+.eyebrow {
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    margin-top: 22px;
+    font-size: clamp(48px, 9vw, 120px);
+    line-height: 0.9;
+    letter-spacing: 4px;
+}
+
+.hero p,
+.manifesto p,
+.page-hero p,
+.line-heading p {
+    max-width: 680px;
+    margin: 24px auto 0;
+    color: var(--gray);
+    font-size: 19px;
+    line-height: 1.7;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 38px;
+}
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 52px;
+    padding: 0 28px;
+    border: 1px solid var(--ice);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.btn-light {
+    background: var(--ice);
+    color: var(--black);
+}
+
+.btn-dark {
+    background: transparent;
+    color: var(--ice);
+}
+
+.split-lines {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--graphite);
+}
+
+.split-lines article {
+    position: relative;
+    min-height: 680px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+}
+
+.split-lines img {
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.55);
+    transition: transform 0.8s ease;
+}
+
+.split-lines article:hover img {
+    transform: scale(1.06);
+}
+
+.split-lines div {
+    position: absolute;
+    left: 42px;
+    right: 42px;
+    bottom: 42px;
+}
+
+.split-lines span,
+.product-card .info span,
+.product-copy > span,
+.cart-row span {
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 4px;
+}
+
+.split-lines h2 {
+    margin-top: 12px;
+    font-size: clamp(30px, 4vw, 58px);
+}
+
+.split-lines p {
+    max-width: 480px;
+    margin-top: 16px;
+    color: var(--gray);
+    line-height: 1.7;
+}
+
+.split-lines a {
+    display: inline-block;
+    margin-top: 24px;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 6px;
+}
+
+.manifesto {
+    padding: clamp(90px, 12vw, 160px) 7%;
+}
+
+.manifesto h2 {
+    max-width: 1050px;
+    margin-top: 20px;
+    font-size: clamp(40px, 7vw, 98px);
+    line-height: 0.95;
+}
+
+.manifesto p {
+    margin-left: 0;
+}
+
+.page {
+    padding-top: 110px;
+}
+
+.page-hero {
+    padding: 80px 7% 50px;
+    text-align: center;
+}
+
+.page-hero h1,
+.line-heading h2,
+.checkout h1 {
+    margin-top: 14px;
+    font-size: clamp(42px, 7vw, 96px);
+    line-height: 0.95;
+    letter-spacing: 6px;
+}
+
+.catalog-line {
+    padding: 70px 7% 90px;
+    background: var(--ice);
+    color: var(--black);
+}
+
+.catalog-line.dark {
+    background: var(--black);
+    color: var(--ice);
+}
+
+.line-heading {
+    margin-bottom: 34px;
+}
+
+.line-heading p {
+    margin-left: 0;
+    color: #666;
+}
+
+.dark .line-heading p {
+    color: var(--gray);
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+}
+
+.product-card {
+    overflow: hidden;
+    background: #111;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    transition: transform 0.45s ease;
+}
+
+.catalog-line:not(.dark) .product-card {
+    background: white;
+}
+
+.product-card.luxury {
+    border-color: var(--gold);
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+}
+
+.product-card img {
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    transition: transform 0.75s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.07);
+}
+
+.product-card .info {
+    padding: 24px;
+}
+
+.product-card h3 {
+    margin-top: 10px;
+    font-size: 24px;
+    letter-spacing: 3px;
+}
+
+.product-card p,
+.product-card em {
+    display: block;
+    margin-top: 12px;
+    color: var(--gray);
+    font-style: normal;
+}
+
+.product-card strong {
+    display: block;
+    margin-top: 16px;
+    font-size: 22px;
+}
+
+.product-card .info a {
+    display: inline-block;
+    margin-top: 20px;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 6px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.product-detail,
+.checkout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 0.8fr);
+    gap: 54px;
+    padding: 70px 7% 100px;
+}
+
+.product-photo {
+    border: 1px solid var(--line);
+    background: var(--graphite);
+}
+
+.product-photo img {
+    min-height: 620px;
+    object-fit: cover;
+}
+
+.product-copy h1 {
+    margin-top: 16px;
+    font-size: clamp(44px, 7vw, 88px);
+    line-height: 0.92;
+}
+
+.product-copy p {
+    margin-top: 24px;
+    color: var(--gray);
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.product-copy > strong {
+    display: block;
+    margin: 24px 0;
+    color: var(--gold);
+    font-size: 28px;
+}
+
+.product-copy label {
+    display: block;
+    margin: 24px 0 10px;
+    color: var(--gray);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.size-options {
+    display: flex;
+    gap: 10px;
+}
+
+.size-options button,
+.cart-row button {
+    min-width: 48px;
+    min-height: 42px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ice);
+    cursor: pointer;
+}
+
+.size-options .selected {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.qty-input,
+.checkout-panel input,
+.checkout-panel select {
+    width: 100%;
+    min-height: 50px;
+    border: 1px solid var(--line);
+    padding: 0 14px;
+    background: #080808;
+    color: var(--ice);
+}
+
+.product-copy .btn {
+    width: 100%;
+    margin-top: 14px;
+}
+
+.detail-list {
+    margin-top: 26px;
+    border-top: 1px solid var(--line);
+}
+
+.detail-list p {
+    margin: 0;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.cart-list {
+    display: grid;
+    gap: 18px;
+    margin-top: 28px;
+}
+
+.cart-row {
+    display: grid;
+    grid-template-columns: 110px 1fr auto;
+    gap: 20px;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid var(--line);
+    background: var(--graphite);
+}
+
+.cart-row img {
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.cart-row h2 {
+    margin-top: 8px;
+}
+
+.cart-row p {
+    margin: 8px 0;
+    color: var(--gray);
+}
+
+.checkout-panel {
+    padding: 28px;
+    border: 1px solid var(--line);
+    background: var(--graphite);
+}
+
+.checkout-panel h2 {
+    font-size: 32px;
+}
+
+.totals {
+    margin: 22px 0;
+}
+
+.totals div {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    color: var(--gray);
+}
+
+.totals .grand-total {
+    color: var(--ice);
+    font-size: 22px;
+}
+
+.checkout-panel form {
+    display: grid;
+    gap: 12px;
+}
+
+.checkout-note {
+    color: var(--gray);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.checkout-panel button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.empty-cart {
+    color: var(--gray);
+    padding: 24px;
+    border: 1px solid var(--line);
+}
+
+.payment-result {
+    min-height: 100vh;
+    display: grid;
+    place-content: center;
+    gap: 24px;
+    padding: 40px 7%;
+    text-align: center;
+    background:
+        radial-gradient(circle at center, rgba(194, 168, 120, 0.14), transparent 30%),
+        var(--black);
+}
+
+.payment-result span {
+    color: var(--gold);
+    font-weight: 900;
+    letter-spacing: 10px;
+}
+
+.payment-result h1 {
+    max-width: 920px;
+    font-size: clamp(42px, 8vw, 100px);
+    line-height: 0.92;
+}
+
+.payment-result p {
+    color: var(--gray);
+    font-size: 18px;
+}
+
+.payment-result .btn {
+    justify-self: center;
+}
+
+.premium-footer {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(300px, 1.5fr) auto;
+    gap: 48px;
+    padding: 58px 7%;
+    background: #050505;
+    border-top: 1px solid var(--line);
+}
+
+.footer-logo {
+    display: block;
+    width: 210px;
+    height: 70px;
+    overflow: hidden;
+    background: url("images/cultstreet-logo-transparent.png") center / contain no-repeat;
+    text-indent: -9999px;
+}
+
+.premium-footer p {
+    margin-top: 14px;
+    color: var(--gray);
+}
+
+.footer-links,
+.footer-social {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+}
+
+.premium-footer nav a {
+    color: var(--gray);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.premium-footer nav a:hover {
+    color: var(--gold);
+}
+
+.institutional-page {
+    background:
+        radial-gradient(circle at 78% 12%, rgba(194, 168, 120, 0.12), transparent 24%),
+        var(--black);
+}
+
+.institutional-hero {
+    min-height: 58vh;
+    display: grid;
+    place-content: end start;
+    gap: 20px;
+    padding: 150px 7% 70px;
+    border-bottom: 1px solid var(--line);
+}
+
+.institutional-hero span {
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.institutional-hero h1 {
+    max-width: 1150px;
+    font-size: clamp(42px, 7vw, 98px);
+    line-height: 0.92;
+    letter-spacing: 4px;
+}
+
+.institutional-hero p {
+    color: var(--gray);
+    font-size: 19px;
+}
+
+.institutional-content {
+    width: min(1120px, 86%);
+    margin: 0 auto;
+    padding: 90px 0 130px;
+}
+
+.institutional-block {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+    gap: 50px;
+    padding: 42px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.institutional-block:first-child {
+    border-top: 1px solid var(--line);
+}
+
+.institutional-block h2 {
+    color: var(--ice);
+    font-size: clamp(22px, 3vw, 34px);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.institutional-block p,
+.contact-channels a {
+    color: var(--gray);
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.institutional-statement p {
+    color: var(--ice);
+    font-size: clamp(22px, 3vw, 34px);
+    line-height: 1.45;
+}
+
+.size-table-wrap {
+    overflow-x: auto;
+}
+
+.size-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.size-table th,
+.size-table td {
+    padding: 18px;
+    border: 1px solid var(--line);
+    text-align: left;
+}
+
+.size-table th {
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.contact-channels {
+    align-content: start;
+}
+
+.contact-channels a {
+    display: block;
+}
+
+.contact-form {
+    display: grid;
+    gap: 14px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    min-height: 52px;
+    border: 1px solid var(--line);
+    padding: 14px;
+    background: #080808;
+    color: var(--ice);
+}
+
+.contact-form textarea {
+    min-height: 170px;
+    resize: vertical;
+}
+
+@media (max-width: 900px) {
+    .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .logo {
+        width: 190px;
+        height: 56px;
+    }
+
+    .nav {
+        flex-wrap: wrap;
+        gap: 18px;
+    }
+
+    .actions,
+    .split-lines,
+    .product-grid,
+    .product-detail,
+    .checkout,
+    .premium-footer,
+    .institutional-block {
+        grid-template-columns: 1fr;
+        display: grid;
+    }
+
+    .hero h1 {
+        font-size: 48px;
+    }
+
+    .hero-brand {
+        height: 120px;
+    }
+
+    .product-photo img {
+        min-height: 420px;
+    }
+
+    .cart-row {
+        grid-template-columns: 86px 1fr;
+    }
+
+    .cart-row button {
+        grid-column: 2;
+    }
+}
+
