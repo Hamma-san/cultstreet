@@ -25,6 +25,10 @@ const validSizes = new Set(["P", "M", "G", "GG"]);
 app.use(express.json({ limit: "20kb" }));
 app.use(express.static(__dirname));
 
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: "ok", service: "cultstreet" });
+});
+
 app.post("/create-preference", async (req, res) => {
     try {
         if (!process.env.MERCADO_PAGO_ACCESS_TOKEN) {
@@ -129,6 +133,6 @@ app.post("/create-preference", async (req, res) => {
     }
 });
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
     console.log(`CultStreet disponível em ${baseUrl}`);
 });
