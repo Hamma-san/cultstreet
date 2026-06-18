@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CultStreet | Entrar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="institutional-page">
+    <header class="site-header solid">
+        <a class="logo" href="index.html">CultStreet</a>
+        <nav class="nav"><a href="catalogo.html">Loja</a><a href="cadastro.html">Criar conta</a><a href="checkout.html">Carrinho</a></nav>
+    </header>
+    <main class="account-shell">
+        <section class="account-panel">
+            <span>Área exclusiva</span>
+            <h1>ENTRAR</h1>
+            <p>Acesse sua conta CultStreet.</p>
+            <form class="account-form" data-login-form>
+                <label>E-mail<input type="email" name="email" required autocomplete="email"></label>
+                <label>Senha<input type="password" name="password" required autocomplete="current-password"></label>
+                <button class="btn btn-light" type="submit">ENTRAR</button>
+                <p class="form-message" data-form-message></p>
+            </form>
+            <a class="account-switch" href="cadastro.html">Ainda não tem conta? Cadastre-se.</a>
+        </section>
+    </main>
+    <script src="account.js"></script>
+</body>
+</html>
