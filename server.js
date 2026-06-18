@@ -1,138 +1,28 @@
-const path = require("path");
-const crypto = require("crypto");
-const express = require("express");
-const dotenv = require("dotenv");
-const { MercadoPagoConfig, Preference } = require("mercadopago");
-
+const path=require("path"),crypto=require("crypto"),express=require("express"),cookieParser=require("cookie-parser"),bcrypt=require("bcryptjs"),jwt=require("jsonwebtoken"),multer=require("multer"),{rateLimit}=require("express-rate-limit"),dotenv=require("dotenv"),{MercadoPagoConfig,Preference}=require("mercadopago");
+const {defaultContent,getPool,getProduct,initializeDatabase,listProducts}=require("./store");
 dotenv.config();
-
-const app = express();
-const port = Number(process.env.PORT || 3000);
-const baseUrl = (process.env.APP_BASE_URL || `http://localhost:${port}`).replace(/\/+$/, "");
-const shippingCost = 24.9;
-
-const catalog = {
-    "essential-001": { name: "ESSENTIAL 001", price: 129.9, stock: 34 },
-    "essential-002": { name: "ESSENTIAL 002", price: 149.9, stock: 28 },
-    "essential-003": { name: "ESSENTIAL 003", price: 159.9, stock: 19 },
-    "black-001": { name: "BLACK 001", price: 299.9, stock: 12 },
-    "black-002": { name: "BLACK 002", price: 399.9, stock: 8 },
-    "black-003": { name: "BLACK 003", price: 499.9, stock: 5 }
-};
-
-const validSizes = new Set(["P", "M", "G", "GG"]);
-
-app.use(express.json({ limit: "20kb" }));
-app.use(express.static(__dirname));
-
-app.get("/health", (req, res) => {
-    res.status(200).json({ status: "ok", service: "cultstreet" });
-});
-
-app.post("/create-preference", async (req, res) => {
-    try {
-        if (!process.env.MERCADO_PAGO_ACCESS_TOKEN) {
-            return res.status(500).json({ error: "Credencial do Mercado Pago não configurada." });
-        }
-
-        const receivedItems = Array.isArray(req.body.items) ? req.body.items : [];
-        if (!receivedItems.length || receivedItems.length > 20) {
-            return res.status(400).json({ error: "Carrinho inválido." });
-        }
-
-        const groupedItems = new Map();
-        receivedItems.forEach((item) => {
-            const key = `${item.id}:${item.size}`;
-            const quantity = Number(item.quantity);
-            groupedItems.set(key, {
-                id: item.id,
-                size: item.size,
-                quantity: (groupedItems.get(key)?.quantity || 0) + quantity
-            });
-        });
-
-        const quantityByProduct = new Map();
-        groupedItems.forEach((item) => {
-            quantityByProduct.set(
-                item.id,
-                (quantityByProduct.get(item.id) || 0) + item.quantity
-            );
-        });
-
-        const validatedItems = [...groupedItems.values()].map((item) => {
-            const product = catalog[item.id];
-            const quantity = Number(item.quantity);
-
-            if (
-                !product ||
-                !Number.isInteger(quantity) ||
-                quantity < 1 ||
-                quantityByProduct.get(item.id) > product.stock
-            ) {
-                throw new Error("Produto ou quantidade inválida.");
-            }
-
-            if (!validSizes.has(item.size)) {
-                throw new Error("Tamanho inválido.");
-            }
-
-            return {
-                id: item.id,
-                title: `${product.name} - Tamanho ${item.size}`,
-                quantity,
-                currency_id: "BRL",
-                unit_price: product.price
-            };
-        });
-
-        const subtotal = validatedItems.reduce(
-            (sum, item) => sum + item.unit_price * item.quantity,
-            0
-        );
-
-        const preferenceItems = [
-            ...validatedItems,
-            {
-                id: "shipping",
-                title: "Frete CULT",
-                quantity: 1,
-                currency_id: "BRL",
-                unit_price: shippingCost
-            }
-        ];
-
-        const client = new MercadoPagoConfig({
-            accessToken: process.env.MERCADO_PAGO_ACCESS_TOKEN,
-            options: { timeout: 5000 }
-        });
-        const preference = new Preference(client);
-        const result = await preference.create({
-            body: {
-                items: preferenceItems,
-                payer: req.body.payer?.email ? { email: String(req.body.payer.email) } : undefined,
-                external_reference: crypto.randomUUID(),
-                statement_descriptor: "CULTSTREET",
-                back_urls: {
-                    success: `${baseUrl}/success.html`,
-                    failure: `${baseUrl}/failure.html`,
-                    pending: `${baseUrl}/pending.html`
-                },
-                auto_return: "approved"
-            }
-        });
-
-        return res.json({
-            init_point: result.init_point || result.sandbox_init_point,
-            subtotal: Number(subtotal.toFixed(2)),
-            shipping: shippingCost,
-            total: Number((subtotal + shippingCost).toFixed(2))
-        });
-    } catch (error) {
-        console.error("Erro ao criar preferência:", error);
-        return res.status(400).json({ error: error.message || "Não foi possível iniciar o pagamento." });
-    }
-});
-
-app.listen(port, "0.0.0.0", () => {
-    console.log(`CultStreet disponível em ${baseUrl}`);
-});
+const app=express(),port=Number(process.env.PORT||3000),baseUrl=(process.env.APP_BASE_URL||`http://localhost:${port}`).replace(/\/+$/,"");
+const shippingCost=24.9,jwtSecret=process.env.JWT_SECRET||crypto.randomBytes(48).toString("hex"),validSizes=new Set(["P","M","G","GG"]),contentKeys=new Set(Object.keys(defaultContent));let databaseReady=false;
+const upload=multer({storage:multer.memoryStorage(),limits:{fileSize:2*1024*1024},fileFilter:(req,file,cb)=>{const ok=["image/jpeg","image/png","image/webp"].includes(file.mimetype);cb(ok?null:new Error("Use JPG, PNG ou WebP."),ok);}});
+const limiter=rateLimit({windowMs:15*60*1000,limit:20});
+app.disable("x-powered-by");app.use(express.json({limit:"100kb"}));app.use(express.urlencoded({extended:false}));app.use(cookieParser());
+const clean=(v,n=500)=>String(v||"").trim().slice(0,n),email=v=>clean(v,180).toLowerCase(),view=u=>({id:u.id,name:u.name,email:u.email,phone:u.phone||"",role:u.role});
+function setSession(res,user){res.cookie("cultstreet_session",jwt.sign({sub:String(user.id),role:user.role},jwtSecret,{expiresIn:"7d"}),{httpOnly:true,secure:process.env.NODE_ENV==="production",sameSite:"lax",maxAge:604800000});}
+async function auth(req,res,next){try{if(!req.cookies.cultstreet_session||!databaseReady)return res.status(401).json({error:"Faça login para continuar."});const p=jwt.verify(req.cookies.cultstreet_session,jwtSecret),r=await getPool().query("SELECT id,name,email,phone,role FROM users WHERE id=$1",[p.sub]);if(!r.rows[0])throw Error();req.user=r.rows[0];next();}catch{res.clearCookie("cultstreet_session");res.status(401).json({error:"Sua sessão expirou."});}}
+const admin=(req,res,next)=>req.user.role==="admin"?next():res.status(403).json({error:"Acesso restrito ao administrador."});
+const dbRequired=(req,res,next)=>databaseReady?next():res.status(503).json({error:"Banco de dados ainda não configurado."});
+app.get("/health",(req,res)=>res.json({status:"ok",database:databaseReady}));
+app.get("/api/products",async(req,res)=>{try{res.json(await listProducts(false));}catch(e){res.status(500).json({error:"Não foi possível carregar os produtos."});}});
+app.get("/api/content",async(req,res)=>{try{if(!databaseReady)return res.json(defaultContent);const r=await getPool().query("SELECT key,value FROM site_content");res.json(Object.fromEntries(r.rows.map(x=>[x.key,x.value])));}catch{res.json(defaultContent);}});
+app.post("/api/auth/register",limiter,dbRequired,async(req,res)=>{try{const name=clean(req.body.name,120),mail=email(req.body.email),password=String(req.body.password||"");if(name.length<2||!mail.includes("@")||password.length<8)return res.status(400).json({error:"Informe nome, e-mail válido e senha com 8 caracteres."});const hash=await bcrypt.hash(password,12),r=await getPool().query("INSERT INTO users(name,email,password_hash) VALUES($1,$2,$3) RETURNING id,name,email,phone,role",[name,mail,hash]);setSession(res,r.rows[0]);res.status(201).json({user:view(r.rows[0])});}catch(e){res.status(e.code==="23505"?409:500).json({error:e.code==="23505"?"Este e-mail já possui cadastro.":"Não foi possível criar a conta."});}});
+app.post("/api/auth/login",limiter,dbRequired,async(req,res)=>{const r=await getPool().query("SELECT * FROM users WHERE email=$1",[email(req.body.email)]),u=r.rows[0];if(!u||!await bcrypt.compare(String(req.body.password||""),u.password_hash))return res.status(401).json({error:"E-mail ou senha incorretos."});setSession(res,u);res.json({user:view(u)});});
+app.post("/api/auth/logout",(req,res)=>{res.clearCookie("cultstreet_session");res.status(204).end();});
+app.get("/api/auth/me",auth,(req,res)=>res.json({user:view(req.user)}));
+app.put("/api/profile",auth,async(req,res)=>{const name=clean(req.body.name,120);if(name.length<2)return res.status(400).json({error:"Informe seu nome."});const r=await getPool().query("UPDATE users SET name=$1,phone=$2 WHERE id=$3 RETURNING id,name,email,phone,role",[name,clean(req.body.phone,30),req.user.id]);res.json({user:view(r.rows[0])});});
+app.get("/api/admin/products",auth,admin,async(req,res)=>res.json(await listProducts(true)));
+app.put("/api/admin/products/:id",auth,admin,async(req,res)=>{const price=Number(req.body.price),remaining=Number(req.body.remaining),name=clean(req.body.name,120),line=clean(req.body.line,40);if(!name||!["Essential","Black Label"].includes(line)||!Number.isFinite(price)||price<0||!Number.isInteger(remaining)||remaining<0)return res.status(400).json({error:"Revise nome, linha, preço e estoque."});const r=await getPool().query("UPDATE products SET name=$1,line=$2,description=$3,details=$4,price=$5,remaining=$6,active=$7,updated_at=NOW() WHERE id=$8 RETURNING id,name,line,description,details,price::float,remaining,image,active",[name,line,clean(req.body.description,240),clean(req.body.details,2000),price,remaining,req.body.active!==false,req.params.id]);if(!r.rows[0])return res.status(404).json({error:"Produto não encontrado."});res.json(r.rows[0]);});
+app.post("/api/admin/products/:id/image",auth,admin,upload.single("image"),async(req,res)=>{if(!req.file)return res.status(400).json({error:"Selecione uma imagem."});const data=`data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,r=await getPool().query("UPDATE products SET image=$1,updated_at=NOW() WHERE id=$2 RETURNING id,image",[data,req.params.id]);res.json(r.rows[0]);});
+app.put("/api/admin/content",auth,admin,async(req,res)=>{for(const [key,value] of Object.entries(req.body||{}).filter(([k])=>contentKeys.has(k)))await getPool().query("INSERT INTO site_content(key,value,updated_at) VALUES($1,$2,NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()",[key,clean(value,2000)]);res.json({success:true});});
+app.post("/create-preference",async(req,res)=>{try{if(!process.env.MERCADO_PAGO_ACCESS_TOKEN)return res.status(500).json({error:"Mercado Pago não configurado."});const received=Array.isArray(req.body.items)?req.body.items:[];if(!received.length||received.length>20)throw Error("Carrinho inválido.");const grouped=new Map();for(const x of received){const id=clean(x.id,60),size=clean(x.size,3),key=`${id}:${size}`,quantity=Number(x.quantity);grouped.set(key,{id,size,quantity:(grouped.get(key)?.quantity||0)+quantity});}const items=[];for(const x of grouped.values()){const p=await getProduct(x.id);if(!p||!p.active||!Number.isInteger(x.quantity)||x.quantity<1||x.quantity>p.remaining)throw Error("Produto ou quantidade inválida.");if(!validSizes.has(x.size))throw Error("Tamanho inválido.");items.push({id:p.id,title:`${p.name} - Tamanho ${x.size}`,quantity:x.quantity,currency_id:"BRL",unit_price:Number(p.price)});}const subtotal=items.reduce((s,x)=>s+x.unit_price*x.quantity,0),preference=new Preference(new MercadoPagoConfig({accessToken:process.env.MERCADO_PAGO_ACCESS_TOKEN})),result=await preference.create({body:{items:[...items,{id:"shipping",title:"Frete CultStreet",quantity:1,currency_id:"BRL",unit_price:shippingCost}],payer:req.body.payer?.email?{email:email(req.body.payer.email)}:undefined,external_reference:crypto.randomUUID(),statement_descriptor:"CULTSTREET",back_urls:{success:`${baseUrl}/success.html`,failure:`${baseUrl}/failure.html`,pending:`${baseUrl}/pending.html`},auto_return:"approved"}});res.json({init_point:result.init_point||result.sandbox_init_point,subtotal,shipping:shippingCost,total:subtotal+shippingCost});}catch(e){console.error(e);res.status(400).json({error:e.message||"Não foi possível iniciar o pagamento."});}});
+app.use(express.static(path.join(__dirname),{extensions:["html"]}));
+(async()=>{try{databaseReady=await initializeDatabase();}catch(e){console.error("Falha no banco:",e);}app.listen(port,"0.0.0.0",()=>console.log(`CultStreet na porta ${port}; banco: ${databaseReady}`));})();
